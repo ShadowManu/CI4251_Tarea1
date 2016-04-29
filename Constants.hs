@@ -5,7 +5,7 @@ License: MIT
 
 Maintainer: manuelalejandropm@gmail.com
 
-Defines constansts used throughout the solution
+Defines constants used throughout the solution
 
 -}
 module Constants
