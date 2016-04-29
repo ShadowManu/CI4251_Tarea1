@@ -6,11 +6,8 @@ import Data.List (foldl', unfoldr)
 -- import Graphics.Rendering.Chart.Easy
 -- import Graphics.Rendering.Chart.Backend.Cairo
 
-data Sample a = Sample { x :: [ a ] , y :: a }
-  deriving (Show)
-
-data Hypothesis a = Hypothesis { c :: [a] }
-  deriving (Show)
+import Types
+import Constants
 
 training :: [Sample Double]
 training = [
@@ -61,15 +58,6 @@ training = [
   Sample { x = [ -1.445422737149154,  -1.537766911784067 ], y = 179900 },
   Sample { x = [ -0.1870899845743182,  1.090416537446884 ], y = 299900 },
   Sample { x = [ -1.003747940995387,  -0.2236751871685913 ], y = 239500 } ]
-  
-alpha :: Double
-alpha = 0.03
-
-epsilon :: Double
-epsilon = 0.0000001
-
-guess :: Hypothesis Double
-guess = Hypothesis { c = [0.0, 0.0, 0.0] }
 
 -- Functions to implement
 veryClose :: Double -> Double -> Bool
