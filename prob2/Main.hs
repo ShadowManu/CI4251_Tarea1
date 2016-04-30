@@ -1,4 +1,3 @@
-
 {- |
 Module: $Header$
 Copyright: (c) Manuel Pacheco 2016
