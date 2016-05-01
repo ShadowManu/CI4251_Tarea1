@@ -18,6 +18,7 @@ module Solution
 ) where
 
 import Data.List (foldl', unfoldr)
+import Control.Monad (liftM2)
 -- import Graphics.Rendering.Chart.Easy
 -- import Graphics.Rendering.Chart.Backend.Cairo
 
@@ -32,9 +33,7 @@ veryClose v0 v1 = (<=epsilon) . abs $ v1 - v0
 
 -- Prepends a constant coefficient to a list of samples
 addOnes :: [Sample Double] -> [Sample Double]
-addOnes = map addOne
-  where
-    addOne e = e { x = 1.0 : x e }
+addOnes = map $ liftM2 Sample ((1:) . x) y
 
 -- Calculates the dot product between hypothesis and a sample
 theta :: Hypothesis Double -> Sample Double -> Double
