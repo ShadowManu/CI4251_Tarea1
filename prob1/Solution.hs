@@ -52,19 +52,19 @@ cost h ss = cleaner $ foldl' adder seed ss
 
 -- Improves the quality of a hypothesis
 descend :: Double -> Hypothesis Double -> [Sample Double] -> Hypothesis Double
-descend alpha h ss = Hypothesis { c = c' }
+descend alpha h ss = Hypothesis { c = result }
   where
-    -- Recursion to calculate all coefficients
-    c' = cleaner $ foldl' adder seed (c h)
-    seed = ([], 0) -- (coefficients, position)
-    adder (ojs, j) oj = (calc oj j : ojs, j+1)
-    cleaner (ojs, _) = reverse ojs
+    -- Fold through samples, accumulating how much each sample affects
+    -- every component of the next hypothesis
 
-    -- Recursion to calculate a coefficient at position j
-    calc oj j = oj - cleaner2 (foldl' (adder2 j) seed2 ss)
-    seed2 = (0, 0) -- (product differences, No of elements)
-    adder2 j (pdiffs, elems) s = (pdiffs + (theta h s - y s) * (x s !! j), elems + 1)
-    cleaner2 (pdiffs, elems) = pdiffs * alpha / elems
+    result = cleaner $ foldl' adder seed ss
+    seed = (repeat 0, 0) -- accumulating load by components, no. of elements
+    adder (acc, m) s = (zipWith (+) acc (calc s), m+1)
+    cleaner (acc, m) = zipWith (\oj load -> oj - (alpha * load / m)) (c h) acc
+
+    -- Inner fold simply modeled as a map
+    -- the zipWih of adder does the rest of the job
+    calc s = map (* (theta h s - y s)) (x s)
 
 -- Generales a list that improves a hypothesis in each step
 gd :: Double -> Hypothesis Double -> [Sample Double] -> [(Integer, Hypothesis Double, Double)]
